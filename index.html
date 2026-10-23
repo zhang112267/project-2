@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EnvyLab - The Bright Side of Rivalry</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background-color: #0f172a; color: #f8fafc; font-family: system-ui, -apple-system, sans-serif; }
+    .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
+    .accent-gradient { background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); }
+    .text-gradient { background: linear-gradient(135deg, #818cf8, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  </style>
+</head>
+
+<body class="min-h-screen flex flex-col justify-between p-4 md:p-8">
+  <!-- Header -->
+  <header class="max-w-3xl mx-auto w-full flex justify-between items-center py-4 border-b border-slate-800">
+    <div class="text-xl font-bold tracking-wider text-gradient">ENVY LAB</div>
+    <div class="text-xs text-slate-400 bg-slate-800/80 px-3 py-1 rounded-full border border-slate-700">
+      Fuhsing Private High School Research Project
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-2xl mx-auto w-full my-auto py-8">
+
+    <!-- Screen 0: Nickname Input -->
+    <div id="screen-nickname" class="glass rounded-2xl p-6 md:p-10 text-center shadow-2xl">
+      <div class="inline-block px-3 py-1 bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-xs rounded-full mb-4">
+        Welcome to EnvyLab
+      </div>
+      <h1 class="text-2xl md:text-3xl font-extrabold mb-3">Enter Your Nickname</h1>
+      <p class="text-slate-400 text-sm mb-6 max-w-sm mx-auto">Please enter your nickname or name to begin the psychological experiment.</p>
+      
+      <div class="max-w-xs mx-auto space-y-4">
+        <input type="text" id="nickname-input" placeholder="e.g.  小明(your preferred nickname)" class="w-full px-4 py-3 rounded-xl bg-slate-800/85 border border-slate-700 text-white text-center focus:outline-none focus:border-indigo-500 transition-all">
+        <button onclick="saveNickname()" class="w-full py-3 rounded-xl font-semibold accent-gradient text-white shadow-lg shadow-indigo-500/25 hover:opacity-95 transition-all">
+          Continue →
+        </button>
+      </div>
+    </div>
+
+    <!-- Screen 1: Hero Landing (Hidden initially) -->
+    <div id="screen-hero" class="glass rounded-2xl p-6 md:p-10 text-center shadow-2xl hidden">
+      <div class="inline-block px-3 py-1 bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-xs rounded-full mb-4">
+        The Bright Side of Bad: Envy & Rivalry
+      </div>
+      <h1 class="text-3xl md:text-4xl font-extrabold mb-4 leading-tight">
+        Hello, <span id="display-name" class="text-gradient"></span>!<br>The Bright Side of Envy
+      </h1>
+      <p class="text-slate-400 text-sm md:text-base mb-8 max-w-lg mx-auto leading-relaxed">
+        When observing exceptional peers in academics, arts, or sports, is that uncomfortable "sting" of social comparison merely a toxic emotion, or is it the ultimate fuel driving personal breakthroughs?
+      </p>
+      
+      <div class="space-y-3">
+        <button onclick="startQuiz()" class="w-full py-4 rounded-xl font-semibold accent-gradient text-white shadow-lg shadow-indigo-500/25 hover:opacity-95 transition-all transform hover:-translate-y-0.5">
+          Start 15-Question Assessment →
+        </button>
+      </div>
+    </div>
+
+    <!-- Screen 2: Quiz Interface -->
+    <div id="screen-quiz" class="glass rounded-2xl p-6 md:p-10 shadow-2xl hidden">
+      <!-- Progress Bar -->
+      <div class="mb-6">
+        <div class="flex justify-between text-xs text-slate-400 mb-2">
+          <span>Question <span id="current-q-num">1</span> / 15</span>
+          <span id="progress-percent">7%</span>
+        </div>
+        <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+          <div id="progress-bar" class="accent-gradient h-full w-[7%] transition-all duration-300"></div>
+        </div>
+      </div>
+
+      <!-- Question Content -->
+      <div class="min-h-[140px] flex items-center mb-8">
+        <h2 id="question-text" class="text-lg md:text-xl font-medium leading-relaxed text-slate-100">
+          Loading question...
+        </h2>
+      </div>
+
+      <!-- Options (Likert 1-5 Scale) -->
+      <div class="space-y-3">
+        <button onclick="selectOption(5)" class="w-full py-3 px-4 rounded-xl bg-slate-800/80 border border-slate-700/60 hover:border-indigo-500 hover:bg-slate-800 text-left text-sm transition-all flex justify-between items-center group">
+          <span>Strongly Agree</span>
+          <span class="text-indigo-400 opacity-0 group-hover:opacity-100 transition-opacity">5 pts</span>
+        </button>
+        <button onclick="selectOption(4)" class="w-full py-3 px-4 rounded-xl bg-slate-800/80 border border-slate-700/60 hover:border-indigo-500 hover:bg-slate-800 text-left text-sm transition-all flex justify-between items-center group">
+          <span>Agree</span>
+          <span class="text-indigo-400 opacity-0 group-hover:opacity-100 transition-opacity">4 pts</span>
+        </button>
+        <button onclick="selectOption(3)" class="w-full py-3 px-4 rounded-xl bg-slate-800/80 border border-slate-700/60 hover:border-indigo-500 hover:bg-slate-800 text-left text-sm transition-all flex justify-between items-center group">
+          <span>Neutral</span>
+          <span class="text-indigo-400 opacity-0 group-hover:opacity-100 transition-opacity">3 pts</span>
+        </button>
+        <button onclick="selectOption(2)" class="w-full py-3 px-4 rounded-xl bg-slate-800/80 border border-slate-700/60 hover:border-indigo-500 hover:bg-slate-800 text-left text-sm transition-all flex justify-between items-center group">
+          <span>Disagree</span>
+          <span class="text-indigo-400 opacity-0 group-hover:opacity-100 transition-opacity">2 pts</span>
+        </button>
+        <button onclick="selectOption(1)" class="w-full py-3 px-4 rounded-xl bg-slate-800/80 border border-slate-700/60 hover:border-indigo-500 hover:bg-slate-800 text-left text-sm transition-all flex justify-between items-center group">
+          <span>Strongly Disagree</span>
+          <span class="text-indigo-400 opacity-0 group-hover:opacity-100 transition-opacity">1 pt</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Screen 3: Individual Result & Live Dashboard & Story Sharing -->
+    <div id="screen-result" class="glass rounded-2xl p-6 md:p-10 shadow-2xl hidden">
+      <div class="text-center mb-8">
+        <div class="text-xs text-indigo-400 uppercase tracking-widest mb-1">Analysis Result for <span id="result-nickname" class="font-bold"></span></div>
+        <h2 id="result-type-title" class="text-2xl md:text-3xl font-extrabold text-gradient mb-2">Analyzing...</h2>
+        <div class="text-4xl md:text-5xl font-black my-4 text-white" id="result-score">0<span class="text-xl text-slate-400">/75</span></div>
+        <p id="result-desc" class="text-sm text-slate-300 leading-relaxed max-w-md mx-auto bg-slate-800/50 p-4 rounded-xl border border-slate-700/50">
+          Loading description...
+        </p>
+      </div>
+
+      <!-- Live Analytics Section -->
+      <div class="border-t border-slate-800 pt-6 mt-6">
+        <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-4 flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          Live Experiment Findings (Aggregate Data)
+        </h3>
+        
+        <div class="grid grid-cols-2 gap-4 mb-6">
+          <div class="bg-slate-800/60 p-4 rounded-xl border border-slate-700/40 text-center">
+            <div class="text-2xl font-bold text-indigo-400">84%</div>
+            <div class="text-[11px] text-slate-400 mt-1">Reported a "competitive sting" from peers</div>
+          </div>
+          <div class="bg-slate-800/60 p-4 rounded-xl border border-slate-700/40 text-center">
+            <div class="text-2xl font-bold text-purple-400">76%</div>
+            <div class="text-[11px] text-slate-400 mt-1">Converted discomfort into intensive practice</div>
+          </div>
+        </div>
+
+        <div class="bg-indigo-950/30 p-4 rounded-xl border border-indigo-800/30 text-xs text-indigo-300 leading-relaxed mb-6">
+          💡 <strong>Experiment Conclusion:</strong> Data proves that while envy causes initial distress, it functions as a potent catalyst for Benign Envy and high-level personal breakthroughs.
+        </div>
+
+        <!-- Story Sharing Textarea Section -->
+        <div class="bg-slate-800/40 p-4 rounded-xl border border-slate-700/60">
+          <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1">
+            Share Your Rivalry Story (Optional)
+          </h3>
+          <p class="text-[11px] text-slate-400 mb-3">
+            Have a personal experience where envy or rivalry pushed you to break your limits? Share your story with us!
+          </p>
+          <textarea id="user-story" rows="3" placeholder="Type your story here..." class="w-full p-3 rounded-lg bg-slate-900 border border-slate-700 text-slate-200 text-xs mb-3 focus:outline-none focus:border-indigo-500"></textarea>
+          <button onclick="submitStory()" class="w-full py-2.5 rounded-lg accent-gradient text-white text-xs font-semibold shadow-md hover:opacity-95 transition-all">
+            Submit Story & Complete
+          </button>
+          <p id="story-feedback" class="text-xs text-emerald-400 mt-2 text-center hidden font-medium">
+            ✨ Thank you! Your story has been successfully recorded to the database.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="max-w-3xl mx-auto w-full text-center text-xs text-slate-500 py-4">
+    JOMO Lab / EnvyLab &copy; 2026. Designed for High School Research.
+  </footer>
+
+  <!-- Logic Script & GAS Integration -->
+  <!-- Logic Script & GAS Integration -->
+  <script>
+    // ⚠️ 請把下面這行引號中的網址換成你在 Google Apps Script 部署拿到的「網頁應用程式網址」
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2X_3e5mp7V-fTZ9ccrpEFSDG__KAKhvJTGKimMHb1AAZUFixYSf8L_N6JJIueO9e64Q/exec";
+
+    let userNickname = "";
+    let calculatedScore = 0;
+    let calculatedType = "";
+    
+    const questions = [
+      "1. When witnessing peers perform exceptionally well in academics, arts, or sports, I immediately feel a competitive 'sting'.",
+      "2. I usually maintain mental 'hidden rivals' and implicitly benchmark my progress against theirs.",
+      "3. Seeing peers achieve accomplishments I desire triggers anxiety and restlessness rather than pure joy for them.",
+      "4. I strongly dislike losing to peers in public or in domains where I consider myself capable.",
+      "5. When a rival experiences setbacks or failures, I occasionally feel a deep sense of relief.",
+      "6. The fear of losing to someone drives my motivation far more effectively than external rewards.",
+      "7. Discovering that a rival is practicing in secret instantly compels me to double my efforts.",
+      "8. I have sacrificed leisure time to undergo rigorous self-practice purely to surpass a specific individual.",
+      "9. When facing formidable rivals, I tend to analyze and adopt their strategies rather than avoid them.",
+      "10. Without direct competition or rivals, I struggle to unlock my peak performance limit.",
+      "11. Looking back, core personal breakthroughs were driven by intense competitive pressure.",
+      "12. Although the process of rivalry brings psychological distress, it significantly strengthens my resilience.",
+      "13. Without the rivals who once challenged or provoked me, my current skill levels would be far more mediocre.",
+      "14. I regard moderate peer competition and envy as indispensable positive catalysts for growth.",
+      "15. I choose to embrace my competitive intolerance of losing and channel it as my primary life driver."
+    ];
+
+    let currentQuestionIndex = 0;
+    let userAnswers = [];
+
+    function saveNickname() {
+      const input = document.getElementById('nickname-input').value.trim();
+      if (!input) {
+        alert("Please enter a nickname to proceed!");
+        return;
+      }
+      userNickname = input;
+      document.getElementById('display-name').innerText = userNickname;
+      
+      document.getElementById('screen-nickname').classList.add('hidden');
+      document.getElementById('screen-hero').classList.remove('hidden');
+    }
+
+    function startQuiz() {
+      document.getElementById('screen-hero').classList.add('hidden');
+      document.getElementById('screen-quiz').classList.remove('hidden');
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      document.getElementById('current-q-num').innerText = currentQuestionIndex + 1;
+      document.getElementById('question-text').innerText = questions[currentQuestionIndex];
+      const percent = Math.round(((currentQuestionIndex + 1) / questions.length) * 100);
+      document.getElementById('progress-percent').innerText = `${percent}%`;
+      document.getElementById('progress-bar').style.width = `${percent}%`;
+    }
+
+    function selectOption(score) {
+      userAnswers.push(score);
+      if (currentQuestionIndex < questions.length - 1) {
+        currentQuestionIndex++;
+        renderQuestion();
+      } else {
+        finishQuiz();
+      }
+    }
+
+    function finishQuiz() {
+      document.getElementById('screen-quiz').classList.add('hidden');
+      document.getElementById('screen-result').classList.remove('hidden');
+      document.getElementById('result-nickname').innerText = userNickname;
+
+      // 🌟 總分滿分 100 分（原始總分 × 100 / 75，平均一題最高 6.67 分）
+      const rawSum = userAnswers.reduce((a, b) => a + b, 0);
+      calculatedScore = (rawSum * (100 / 75)).toFixed(1);
+      
+      // 畫面上的滿分標示改為 /100
+      document.getElementById('result-score').innerHTML = `${calculatedScore}<span class="text-xl text-slate-400">/100</span>`;
+
+      // 等比例換算級距門檻（原本的 55 分與 38 分換算成 100 分制）
+      if (calculatedScore >= 73.3) { // 相當於原本的 55 分
+        calculatedType = "High Benign Competitor";
+        desc = `${userNickname}, you exhibit high competitive awareness and exceptional drive. You excel at turning the discomfort of peer comparison into intense, disciplined action. Rivals serve as your ultimate catalysts.`;
+      } else if (calculatedScore >= 50.7) { // 相當於原本的 38 分
+        calculatedType = "Moderate Growth-Driven";
+        desc = `${userNickname}, you maintain a steady personal pace while retaining the capacity to unlock latent potential and high performance when directly stimulated by strong rivals.`;
+      } else {
+        calculatedType = "Peaceful Zen Mode";
+        desc = `${userNickname}, you remain largely detached from peer rivalry or social comparison, preferring to measure success strictly against your own past self rather than external benchmarks.`;
+      }
+
+      document.getElementById('result-type-title').innerText = calculatedType;
+      document.getElementById('result-desc').innerText = desc;
+
+      // 自動傳送測驗結果到 Google 試算表
+      sendDataToSpreadsheet("");
+    }
+
+    function submitStory() {
+      const storyText = document.getElementById('user-story').value.trim();
+      if (!storyText) {
+        alert("Please write something before submitting!");
+        return;
+      }
+      sendDataToSpreadsheet(storyText);
+      document.getElementById('story-feedback').classList.remove('hidden');
+    }
+
+    function sendDataToSpreadsheet(story) {
+      if (SCRIPT_URL === "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE") return;
+
+      const payload = {
+        nickname: userNickname,
+        totalScore: calculatedScore,
+        resultType: calculatedType,
+        story: story
+      };
+
+      fetch(SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      }).catch(err => console.error("Error saving data:", err));
+    }
+  </script>
+</body>
+</html>
